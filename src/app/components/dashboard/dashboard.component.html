@@ -1,0 +1,199 @@
+<app-sidebar></app-sidebar>
+<div class="container mt-3">
+    <h2 class="text-center mb-4">Gestión de facturas</h2>
+    <hr class="w-75 mx-auto mb-2 mb-xl-9 border-dark-subtle">
+    @if (loading) {
+    <div class="table-responsive mx-auto">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+                <input type="text" class="form-control me-2" placeholder="N° Factura" [(ngModel)]="invoiceNumber"
+                    style="width: auto;">
+                <button class="btn btn-outline-primary" (click)="viewInvoice(invoiceNumber)">Buscar</button>
+            </div>
+            <div>
+                <button class="btn btn-outline-secondary d-flex align-items-center" [routerLink]="['/emitir-factura']">
+                    <i class='bx bxs-file-plus fs-3'></i> Emitir nueva factura
+                </button>
+            </div>
+        </div>
+
+
+        <table class="table table-hover">
+            <thead>
+                <tr class="text-center">
+                    <th>ID</th>
+                    <th>Numeración</th> 
+                    <th>Cliente</th>
+                    <th>Identificacion</th>
+                    <th>Fecha de emision</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of invoices; track $index) {
+                <tr class="text-center">
+                    <td>{{item.id}}</td>
+                    <td>{{item.number || 'Sin número'}}</td>
+                    <td>{{item.names || 'Sin nombre'}}</td>
+                    <td>{{item.identification || 'Sin identificación'}}</td>
+                    <td>{{item.created_at || 'Fecha no disponible'}}</td>
+                    <td>{{item.total || '0.00' | numberFormatter}}</td>
+
+                    <td>
+                        <button class="btn-icon btn-view me-1" (click)="viewInvoice(item.number)">
+                            <span data-text-end="Copied!" data-text-initial="Visualizar factura" class="tooltip"></span>
+                            <span>
+                                <i class='bx bx-file-find'></i>
+                            </span>
+                        </button>
+                        <button class="btn-icon btn-pdf me-1" (click)="downloadInvoicePDF(item.number)">
+                            <span data-text-end="Copied!" data-text-initial="Descargar PDF" class="tooltip"></span>
+                            <span>
+                                <i class='bx bxs-file-pdf'></i>
+                            </span>
+                        </button>
+                        <button class="btn-icon btn-xml" (click)="downloadInvoiceXML(item.number)">
+                            <span data-text-end="Copied!" data-text-initial="Descargar XML" class="tooltip"></span>
+                            <span>
+                                <i class='bx bxs-file-export'></i>
+                            </span>
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="#" (click)="changePage(currentPage - 1)">Anterior</a>
+                </li>
+                @for (page of getPaginationButtons(); track $index) {
+                <li class="page-item" [class.active]="page === currentPage" [class.disabled]="page === -1">
+                    @if (page !== -1) {
+                    <a class="page-link" href="#" (click)="changePage(page)">{{ page
+                        }}</a>
+                    }@else {
+                    <span>...</span>
+                    }
+                </li>
+                }
+
+
+                <li class="page-item" [class.disabled]="currentPage === pages.last_page">
+                    <a class="page-link" href="#" (click)="changePage(currentPage + 1)">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+    }@else{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    }
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceModalLabel">Factura Electrónica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-header mb-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{{InvoiceView?.company?.url_logo}}" alt="Logo compañia" height="180px">
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <p>FACTURA ELECTRÓNICA DE VENTA</p>
+                            <p>{{InvoiceView?.company?.company}}</p>
+                            <p>NIT: {{InvoiceView?.company?.nit}}</p>
+                            <p>{{InvoiceView?.company?.direction}}</p>
+                            <p>{{InvoiceView?.company?.phone}}</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <p>Factura N°</p>
+                            <p>{{InvoiceView?.bill?.number}}</p>
+                            <img src="{{InvoiceView?.bill?.qr_image}}" alt="QR factura" height="130px">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>CC/NIT: {{InvoiceView?.customer?.identification}}</p>
+                            <p>Cliente: {{InvoiceView?.customer?.names}}</p>
+                            <p>Direccion: {{InvoiceView?.customer?.address}}</p>
+                            <p>Municipio: {{InvoiceView?.customer?.municipality?.name}}</p>
+                            <p>Email: {{InvoiceView?.customer?.email}}</p>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <p>Fecha de generacion: {{InvoiceView?.bill?.created_at}}</p>
+                            <p>Fecha de Validacion: {{InvoiceView?.bill?.validated}}</p>
+                            @if (InvoiceView?.billing_period?.start_date && InvoiceView?.billing_period?.end_date) {
+                            <div class="mt-1">
+                                <span>Periodo Facturado</span>
+                                <p>Desde {{InvoiceView?.billing_period?.start_date}} hasta
+                                    {{InvoiceView?.billing_period?.end_date}}</p>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span>Informacion de pago</span>
+                            <p>Forma de pago: {{InvoiceView?.bill?.payment_form?.name}}</p>
+                            <p>Medio: {{InvoiceView?.bill?.payment_method?.name}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h6><strong>Detalle de Productos</strong></h6>
+                <table class="table table-bordered invoice-table mb-4">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Val. Unit </th>
+                            <th>Descuento</th>
+                            <th>IVA/IC</th>
+                            <th>Val. Item</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of InvoiceView.items; track $index) {
+                        <tr>
+                            <td>{{item.code_reference}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{{item.price | numberFormatter}}</td>
+                            <td>{{item.discount | numberFormatter}}</td>
+                            <td>{{item.tax_amount | numberFormatter}}</td>
+                            <td>{{item.total | numberFormatter}}</td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <div class="total-section">
+                    <h4>Total: {{ getTotalPrice() | numberFormatter}}</h4>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary"
+                    (click)="downloadInvoicePDF(InvoiceView?.bill?.number)">Descargar</button>
+            </div>
+        </div>
+    </div>
+</div>

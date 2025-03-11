@@ -1,0 +1,46 @@
+```
+# Integración de API de Facturación Electrónica - Factus
+
+Este proyecto integra la API de facturación electrónica Factus.
+Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-cli) versión 17.2.2.
+
+## Instalación
+
+1. Clona el repositorio:
+   ```sh
+   git clone https://github.com/andresbena04/factus-api-integration.git
+   cd factus-api-integration
+   ```
+2. Instala las dependencias:
+   ```sh
+   npm install
+   ```
+3. Configura las variables de entorno:
+   - Crea el archivo `environments/environment.ts` o `environments/environment.prod.ts`.
+   - Configura las variables de entorno en estos archivos según el ejemplo proporcionado.
+
+## Ejemplo de Archivo de Environments
+
+```ts
+// environments/environment.example.ts
+export const environment = {
+    production: false,
+    apiUrl: 'https://api-sandbox.factus.com.co',
+    user: 'your-user',
+    password:'password',
+    clientID:'your-client-id',
+    clientSecret:'your-client-secret'
+};
+```
+
+## Ejecución
+
+- Ejecutar proyecto:
+  ```sh
+  ng serve
+  ```
+
+## Contribución
+
+Para contribuir, por favor abre un Pull Request con tus cambios.
+```

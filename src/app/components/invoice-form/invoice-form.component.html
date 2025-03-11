@@ -1,0 +1,255 @@
+<app-sidebar></app-sidebar>
+<div class="container mt-3">
+    <form [formGroup]="invoiceForm" class="shadow p-4 rounded" (ngSubmit)="onSubmit()">
+        <button class="btn btn-outline-secondary d-flex align-items-center" [routerLink]="['']"><i class='bx bx-arrow-back'></i> Volver</button>
+        <div class="d-flex align-items-center">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3qyTW8s6UfaD4vVMLkLR7kgq7r3v_FOkjPg&s"
+                alt="" height="100px">
+            <h3 class="mb-4">Emisión de Factura</h3>
+        </div>
+
+        <!-- Datos de la Factura -->
+        <div class="mb-3">
+            <h5 class="mb-3">Datos de Facturación</h5>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label for="numbering_range_id" class="form-label">Rango de Numeración</label>
+                    <select id="numbering_range_id" formControlName="numbering_range_id" class="form-select">
+                        <option value="" selected disabled>Seleccione</option>
+                        @for (item of numberRange; track item.id) {
+                        <option value="{{item.id}}">{{item.prefix}} ({{item.from}} - {{item.to}})</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="reference_code" class="form-label">Referencia</label>
+                    <input type="text" id="reference_code" formControlName="reference_code" class="form-control"
+                        placeholder="Referencia">
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="start_date" class="form-label">Fecha de Inicio</label>
+                    <input type="date" id="start_date" formControlName="start_date" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="start_time" class="form-label">Hora de Inicio</label>
+                    <input type="time" id="start_time" formControlName="start_time" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_date" class="form-label">Fecha de Fin</label>
+                    <input type="date" id="end_date" formControlName="end_date" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_time" class="form-label">Hora de Fin</label>
+                    <input type="time" id="end_time" formControlName="end_time" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Datos de Pago -->
+        <div class="mb-3">
+            <h5 class="mb-3">Datos de Pago</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="payment_method" class="form-label">Forma de Pago</label>
+                    <select id="payment_method" formControlName="payment_form" class="form-select">
+                        <option value="">Seleccione</option>
+                        <option value="1">Pago de Contado</option>
+                        <option value="2">Pago a Crédito</option>
+                    </select>
+                </div>
+                @if (invoiceForm.get('payment_form')!.value == '2') {
+                <div class="col-md-4">
+                    <label for="payment_due_date" class="form-label">Fecha de Vencimiento</label>
+                    <input type="date" id="payment_due_date" formControlName="payment_due_date" class="form-control">
+                </div>
+                }
+                <div class="col-md-4">
+                    <label for="payment_method_code" class="form-label">Método de Pago</label>
+                    <select id="payment_method_code" formControlName="payment_method_code" class="form-select">
+                        <option value="" selected disabled>Seleccione</option>
+                        <option value="10">Efectivo</option>
+                        <option value="47">Transferencia</option>
+                        <option value="49">Tarjeta Débito</option>
+                        <option value="48">Tarjeta Crédito</option>
+                        <option value="zzz">Otro*</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4" />
+        <!-- Datos del Cliente -->
+        <div class="mb-3">
+            <h5 class="mb-3">Datos del Cliente</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="customerName" class="form-label">Nombre</label>
+                    <input type="text" id="customerName" formControlName="names" class="form-control"
+                        placeholder="Nombre del Cliente" />
+                </div>
+                <div class="col-md-4">
+                    <label for="types_documents" class="form-label">Tipo de Documento</label>
+                    <select id="types_documents" formControlName="identification_document_id" class="form-select">
+                        <option value="" selected disabled>Seleccione</option>
+                        <option value="2">Tarjeta de Identidad</option>
+                        <option value="3">Cédula de Ciudadanía</option>
+                        <option value="5">Cédula de Extranjería</option>
+                        <option value="6">NIT</option>
+                        <option value="7">Pasaporte</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="identification" class="form-label">Número de Identificación</label>
+                    <input type="text" id="identification" formControlName="identification" class="form-control"
+                        placeholder="Número de Identificación" />
+                </div>
+            </div>
+            <div class="row g-3 mt-1">
+                @if (invoiceForm.get('identification_document_id')!.value == '6') {
+                <div class="col-md-4">
+                    <label for="dv" class="form-label">Dígito de Verificación</label>
+                    <input type="text" id="dv" formControlName="dv" class="form-control"
+                        placeholder="Dígito de Verificación" />
+                </div>
+                }
+                <div class="col-md-4">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" id="email" formControlName="email" class="form-control"
+                        placeholder="Correo Electrónico" />
+                </div>
+                <div class="col-md-4">
+                    <label for="phone" class="form-label">Teléfono</label>
+                    <input type="text" id="phone" formControlName="phone" class="form-control" placeholder="Teléfono" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="businessType" class="form-label">Tipo de Organización</label>
+                    <select id="businessType" formControlName="legal_organization_id" class="form-select">
+                        <option value="" selected disabled>Seleccione</option>
+                        <option value="2">Persona Natural</option>
+                        <option value="1">Persona Jurídica</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="tribute_id" class="form-label">Tipo de Tributo</label>
+                    <select id="tribute_id" formControlName="tribute_id" class="form-select">
+                        <option value="" selected disabled>Seleccione</option>
+                        <option value="18">IVA</option>
+                        <option value="21">No Aplica</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="municipality" class="form-label">Municipio</label>
+                    <select id="municipality" formControlName="municipality_id" class="form-select">
+                        <option value="" selected disabled>Seleccione</option>
+                        @for (item of municipalities; track $index) {
+                        <option value="{{item.id}}">{{item.name}}</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="address" class="form-label">Dirección</label>
+                    <input type="text" id="address" formControlName="address" class="form-control"
+                        placeholder="Dirección" />
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+        <!-- Datos de productos -->
+        <div class="mb-3">
+            <h5 class="mb-3">Datos del Producto</h5>
+            <div formArrayName="items">
+                @for (item of items.controls; track item.value.id; let i = $index; let first = $first) {
+                <label for="items" class="form-label">Producto {{i + 1}}</label>
+                <div [formGroupName]="i" class="mb-2">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" formControlName="code_reference"
+                                placeholder="Código" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" formControlName="name" placeholder="Producto" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" formControlName="quantity"
+                                placeholder="Cantidad" />
+                        </div>
+                        <div class="col-md-3">
+                            <select formControlName="unit_measure_id" id="unit_measure_id" class="form-select">
+                                <option value="" disabled selected>Unidad de Medida</option>
+                                @for (item of measurementUnits; track item.id) {
+                                <option value="{{item.id}}">{{item.name}}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" formControlName="price" placeholder="Precio" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" formControlName="discount_rate"
+                                placeholder="Descuento" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" formControlName="tax_rate"
+                                placeholder="Impuesto" />
+                        </div>
+                        <div class="col-md-3">
+                            <select formControlName="is_excluded" id="is_excluded" class="form-select">
+                                <option value="" disabled selected>Excluido de IVA</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select formControlName="standard_code_id" id="standard_code_id" class="form-select">
+                                <option value="" disabled selected>Estándar del Producto</option>
+                                <option value="1">Estándar de Adopción</option>
+                                <option value="2">UNSPSC</option>
+                                <option value="3">Partida Arancelaria</option>
+                                <option value="4">GTIN</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select formControlName="tribute_id" id="tribute_id" class="form-select">
+                                <option value="" selected disabled>Tributos del Producto</option>
+                                @for (item of productTaxes; track item.id) {
+                                <option value="{{item.id}}">{{item.name}}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-outline-danger" (click)="removeItem(i)">
+                                <i class="bx bx-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="my-4" />
+                </div>
+                }
+            </div>
+            <button type="button" class="btn btn-outline-primary mt-2" (click)="addItem()">
+                <i class="bx bx-plus-circle"></i> Agregar Producto
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button type="button" class="btn btn-primary w-100" [routerLink]="['']">Volver</button>
+            </div>
+            <div class="col-6">
+                @if (!loading) {
+                <button type="submit" class="btn btn-success w-100" [disabled]="invoiceForm.invalid">Emitir Factura</button>
+                } @else {
+                <div class="loading-spinner text-center">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </form>
+</div>

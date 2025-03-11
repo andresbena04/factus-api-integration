@@ -1,0 +1,158 @@
+.invoice-header {
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.invoice-details {
+    font-size: 14px;
+}
+
+.invoice-table th, 
+.invoice-table td {
+    text-align: center;
+}
+
+.total-section {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.modal-dialog {
+    max-width: 900px;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+.btn-icon {
+    /* Button variables */
+    --button-view: #0D6EFD;
+    --button-pdf: #157347;
+    --button-xml: #6C757D;
+    --button-hover-bg: #464646;
+    --button-text-color: #CCCCCC;
+    --button-hover-text-color: #8bb9fe;
+    --button-border-radius: 10px;
+    --button-diameter: 36px;
+    --button-outline-width: 1px;
+    --button-outline-color: rgb(141, 141, 141);
+    
+    /* Tooltip variables */
+    --tooltip-bg: #f4f3f3;
+    --tooltip-border-radius: 4px;
+    --tooltip-font-family: Menlo, Roboto Mono, monospace;
+    --tooltip-font-size: 12px;
+    --tooltip-text-color: rgb(50, 50, 50);
+    --tooltip-padding-x: 7px;
+    --tooltip-padding-y: 7px;
+    --tooltip-offset: 8px;
+}
+
+.btn-icon {
+    box-sizing: border-box;
+    width: var(--button-diameter);
+    height: var(--button-diameter);
+    border-radius: var(--button-border-radius);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+}
+.btn-icon i{
+    font-size: 1.2rem;
+}
+.btn-view {
+    background-color: transparent;
+    border: 1px solid var(--button-view);
+    color: var(--button-view);
+}
+
+.btn-view:hover {
+    background-color: var(--button-view);
+    border: 1px solid var(--button-view);
+    color: black;
+}
+
+.btn-pdf {
+    background-color: transparent;
+    border: 1px solid var(--button-pdf);
+    color: var(--button-pdf);
+}
+
+.btn-pdf:hover {
+    background-color: var(--button-pdf);
+    border: 1px solid var(--button-pdf);
+    color: black;
+}
+
+.btn-xml {
+    background-color: transparent;
+    border: 1px solid var(--button-xml);
+    color: var(--button-xml);
+}
+
+.btn-xml:hover {
+    background-color: var(--button-xml);
+    border: 1px solid var(--button-xml);
+    color: black;
+}
+
+.tooltip {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: normal; /* Permite que el texto se ajuste en varias líneas */
+    font: var(--tooltip-font-size) var(--tooltip-font-family);
+    color: var(--tooltip-text-color);
+    background: var(--tooltip-bg);
+    padding: var(--tooltip-padding-y) var(--tooltip-padding-x);
+    border-radius: var(--tooltip-border-radius);
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    max-width: 300px; /* Ajusta este valor según tus necesidades */
+    word-wrap: break-word; /* Permite que las palabras largas se dividan y ajusten */
+}
+
+.tooltip::before {
+    content: attr(data-text-initial);
+}
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: calc(-1 * var(--tooltip-padding-y) / 2);
+    width: var(--tooltip-padding-y);
+    height: var(--tooltip-padding-y);
+    background: inherit;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: -1;
+}
+
+.btn-icon i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Interactions */
+.btn-icon:hover .tooltip,
+.btn-icon:focus:not(:focus-visible) .tooltip {
+    opacity: 1;
+    visibility: visible;
+    top: calc(-1 * (100% + var(--tooltip-offset)));
+}
+
+
+
+.btn-icon:active {
+    outline: var(--button-outline-width) solid var(--button-outline-color);
+}
+

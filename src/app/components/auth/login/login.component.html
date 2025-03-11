@@ -1,0 +1,50 @@
+<section class="bg-light py-3 py-md-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="card border border-light-subtle rounded-3 shadow-sm">
+                    <div class="card-body p-3 p-md-4 p-xl-5">
+                        <div class="text-center mb-3">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3qyTW8s6UfaD4vVMLkLR7kgq7r3v_FOkjPg&s"
+                                alt="Factus Logo" height="150">
+                        </div>
+                        <hr>
+                        <form [formGroup]="formLogin">
+                            <div class="row gy-2 overflow-hidden">
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="username" id="username"
+                                            formControlName="username" placeholder="name@example.com" required>
+                                        <label for="username" class="form-label">Usuario</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" class="form-control" name="password" id="password"
+                                            formControlName="password" placeholder="Password" required>
+                                        <label for="password" class="form-label">Contraseña</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    @if (!loading) {
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary" type="submit" [disabled]="formLogin.invalid"
+                                            (click)="logIn()">Ingresar</button>
+                                    </div>
+                                    }@else {
+                                    <div class="loading-spinner text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
