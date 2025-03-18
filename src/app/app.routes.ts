@@ -6,7 +6,7 @@ import { authGuard } from './helpers/auth.guard';
 import { loginAccessGuard } from './helpers/login-access.guard';
 
 export const routes: Routes = [
-    {path: '', component:DashboardComponent, canActivate:[authGuard]},
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {path: 'emitir-factura', component:InvoiceFormComponent, canActivate:[authGuard]},
     {path: 'login', component:LoginComponent, canActivate:[loginAccessGuard]},
     { path: '**', component: DashboardComponent }

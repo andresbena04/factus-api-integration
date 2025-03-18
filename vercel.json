@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "public": true,
+    "builds": [
+      {
+        "src": "angular.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "dist/api-factus"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ]
+  }
+  
