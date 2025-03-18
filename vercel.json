@@ -3,7 +3,7 @@
     "public": true,
     "builds": [
       {
-        "src": "angular.json",
+        "src": "package.json",
         "use": "@vercel/static-build",
         "config": {
           "distDir": "dist/api-factus"
