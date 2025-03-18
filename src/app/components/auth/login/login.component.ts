@@ -25,12 +25,17 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.initializeForm()
+  
   }
   private initializeForm(): void {
     this.formLogin = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+    this.formLogin.setValue({
+      username: 'sandbox@factus.com.co',
+      password: 'sandbox2024%'
+    })
   }
   // Método que se llama al hacer clic en el botón de login
   logIn(): void {
